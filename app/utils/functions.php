@@ -18,7 +18,8 @@ function productPerCategory($product):array{
     
    $tab = array_reduce($product,function($acc,$prod){
         if (isset($acc[$prod['category']])) {
-            $acc[$prod['category']] = [...$acc[$prod['category']],$prod];
+            $acc[$prod['category']] = array_merge($acc,$prod['category']);
+            // [...$acc[$prod['category']],$prod]
         } else{
             $acc[$prod['category']] = $prod;
         }
