@@ -3,7 +3,7 @@
 
     $authDB = require_once __DIR__.'/database/security.php';
     $productDB = require_once __DIR__.'/database/models/productDB.php';
-    require_once __DIR__.'/utils/functions.php';
+    //require_once __DIR__.'/utils/functions.php';
 
     $product = $productDB->fetchAll();
     $isCurrentCustomer = $authDB->isLoggedin();

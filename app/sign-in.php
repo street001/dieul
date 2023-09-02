@@ -8,7 +8,7 @@ $isCurrentCustomer = $authDB->isLoggedin();
 
 
 
-require_once __DIR__.'/utils/functions.php';
+//require_once __DIR__.'/utils/functions.php';
 
 const ERREUR_REQUIRED = "Veuillez remplire ce champs";
 const ERREUR_INVALIDE_EMAIL = "email Invalide";

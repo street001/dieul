@@ -2,7 +2,7 @@
 
  require __DIR__.'/database/database.php';
  $authDB = require __DIR__.'/database/security.php';
- require_once __DIR__.'/utils/functions.php';
+ 
  $productDB = require_once __DIR__.'/database/models/productDB.php';
  $newCommande = require __DIR__.'/database/models/commandeDB.php';
 
