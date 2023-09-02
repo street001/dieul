@@ -1,6 +1,6 @@
 <?php
 $dns = 'mysql:host=localhost;dbname=shop';
-$usr = 'root';
+$usr = 'street';
 $password = '**Ordinateur12';
 
 
