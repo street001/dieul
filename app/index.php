@@ -6,15 +6,15 @@
     $authDB = require_once __DIR__.'/database/security.php';
     $isCurrentCustomer = $authDB->isLoggedin();
   
-    //require_once __DIR__.'/utils/functions.php';
+    require_once __DIR__.'/utils/functions.php';
     
 
-   // if (count($product)) {
-      //  $category = category($product);
-       //  $productPerCategory = productPerCategory($product);
-        // print_r($caegory);
-        //  print_r($productPerCategory);
-   // }
+    // if (count($product)) {
+    //     $category = category($product);
+    //     $productPerCategory = productPerCategory($product);
+    //      print_r($caegory);
+    //      print_r($productPerCategory);
+    // }
 
    
 
@@ -43,7 +43,7 @@
     <!-- /preload -->
 
     <div id="wrapper" class="wrapper-style">
-        <div id="page" class="clearfix">
+        
             
         <?= require_once __DIR__.'/include/header.php' ?>
 

@@ -1,7 +1,7 @@
 <?php
     require_once __DIR__.'/database/database.php';
      $productDB = require_once __DIR__.'/database/models/productDB.php';
-     require_once __DIR__.'/utils/functions.php';
+    require_once __DIR__.'/utils/functions.php';
      $authDB = require_once __DIR__.'/database/security.php';
      $isCurrentCustomer = $authDB->isLoggedin();
 
@@ -13,6 +13,38 @@
   $productOn = $productDB->fetchAllCategory($categ);
   $product = $productDB->fetchAll();
 
+  //Trie les categorie
+  function category($product):array{
+      $catgrp = array_map(fn($a)=>$a['category'],$product);
+      $category = array_reduce($catgrp,function($acc,$cat){
+          if (isset($acc[$cat])) {
+              $acc[$cat]++;
+          }else{
+              $acc[$cat] = 1;
+          }
+          return $acc;
+      },[]);
+      return $category;
+  }
+  
+  //Trie les Produits Par Categorie
+//   function productPerCategory($product):array{
+      
+//      $tab = array_reduce($product,function($acc,$prod){
+//           if (isset($acc[$prod['category']])) {
+//               $acc[$prod['category']] = [...$acc[$prod['category']],$prod];
+              
+//           } else{
+//               $acc[$prod['category']] = $prod;
+//           }
+         
+//         return $acc;
+//        },[]);
+      
+//       return $tab;
+//   }
+
+ $category = category($product);
  
 
  
@@ -65,308 +97,33 @@
             <section class="tf-collection-inner">
                 <div class="tf-container">
                     <div class="row ">
-                        <div class="col-lg-3 col-md-4">
+                        <div class="col-lg-8 col-md-4">
                             <div class="sidebar sidebar-collection">
-                                <!-- <div class="widget widget-clothing widget-accordion">
-                                    <h6 class="widget-title active">CLOTHING</h6>
+                                <div class="widget widget-clothing widget-accordion">
+                                    <h6 class="widget-title active">OUTILS</h6>
                                     <div class="widget-content">
                                         <form action="#" class="form-checkbox">
+                                        <?php foreach ($category as $cat => $catvalues ) : ?>
+                                           
                                             <label class="checkbox-item">
-                                                <span class="custom-checkbox">
+                                         
+                                            <a href="collection.php?cat=<?=$cat?>"> 
+                                                <!-- <span class="custom-checkbox">
                                                     <input type="checkbox" >
                                                     <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Combatant</span>                                              
+                                                </span> -->
+                                              
+                                                <?=$cat?>
+                                             </a>                                               
                                             </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Ninja</span>
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox" checked="checked">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>King</span>
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Queen</span>
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Robot</span>
-                                            </label>
+                                         <?php endforeach; ?>  
                                         </form>
                                     </div>
-                                </div> -->
-                                <!-- <div class="widget widget-eyes widget-accordion">
-                                    <h6 class="widget-title active">EYES</h6>
-                                    <div class="widget-content">
-                                        <form action="#" class="form-checkbox">
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox" >
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Yellow</span>
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Green</span>
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox" checked="checked">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Mix</span>
-                                                
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Orange</span>
-                                                
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>glow</span>
-                                                
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox" >
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Blue</span>
-                                                
-                                            </label>
-                                        </form>
-                                    </div>
-                                </div> -->
-                                <!-- <div class="widget widget-face widget-accordion">
-                                    <h6 class="widget-title">FACE</h6>
-                                    <div class="widget-content">
-                                        <form action="#" class="form-checkbox">
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox" >
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Yellow</span>
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Green</span>
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox" checked="checked">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Mix</span>
-                                                
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Orange</span>
-                                                
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>glow</span>
-                                                
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox" >
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Blue</span>
-                                                
-                                            </label>
-                                        </form>
-                                    </div>
-                                </div> -->
-                                <!-- <div class="widget widget-skin widget-accordion">
-                                    <h6 class="widget-title">SKIN</h6>
-                                    <div class="widget-content">
-                                        <form action="#" class="form-checkbox">
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox" >
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Yellow</span>
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Green</span>
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox" checked="checked">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Mix</span>
-                                                
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Orange</span>
-                                                
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>glow</span>
-                                                
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox" >
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Blue</span>
-                                                
-                                            </label>
-                                        </form>
-                                    </div>
-                                </div> -->
-                                <!-- <div class="widget widget-background widget-accordion">
-                                    <h6 class="widget-title">BACKGROUND</h6>
-                                    <div class="widget-content">
-                                        <form action="#" class="form-checkbox">
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox" >
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Yellow</span>
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Green</span>
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox" checked="checked">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Mix</span>
-                                                
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Orange</span>
-                                                
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>glow</span>
-                                                
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox" >
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Blue</span>
-                                                
-                                            </label>
-                                        </form>
-                                    </div>
-                                </div> -->
-                                <!-- <div class="widget widget-special widget-accordion">
-                                    <h6 class="widget-title active">SPECIAL</h6>
-                                    <div class="widget-content">
-                                        <form action="#" class="form-checkbox">
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox" >
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Cat</span>
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Sakura</span>
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox" checked="checked">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Snake</span>
-                                                
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Eath</span>
-                                                
-                                            </label>
-                                            <label class="checkbox-item">
-                                                <span class="custom-checkbox">
-                                                    <input type="checkbox">
-                                                    <span class="btn-checkbox"></span>
-                                                </span>
-                                                <span>Water</span>
-                                                
-                                            </label>
-                                        </form>
+                                </div> 
+                              
                                     </div>
                                 </div>
-                                 -->
+                                 
                             </div>
                         </div>
                         <div class="col-lg-9 col-md-8 ">
@@ -394,7 +151,7 @@
                                          <div class="image">
                                              <div class="image-container" style="background-image: url(<?= $pro['image']?>);"></div>
                                          </div>
-                                         <h6 class="name"><a href="item-detail.php"><?=$pro['name'] ?></a></h6>
+                                         <h6 class="name"><a href="item-detail.php?id=<?=$pro['id'] ?>"><?=$pro['name'] ?></a></h6>
                                     </div>
                                 </div>
                               <?php endforeach; ?>  

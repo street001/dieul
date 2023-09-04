@@ -3,3 +3,7 @@
     height: 150px;
     background-size: cover;
 }
+.tf-collection-inner{
+    display: flex;
+    flex-direction: row;
+}
