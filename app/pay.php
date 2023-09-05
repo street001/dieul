@@ -1,4 +1,77 @@
 <?php
+    $_POST = filter_input_array(INPUT_POST,FILTER_SANITIZE_SPECIAL_CHARS);
+   
+   
+    require __DIR__.'/database/database.php';
+    $authDB = require __DIR__.'/database/security.php';
+    $productDB = require_once __DIR__.'/database/models/productDB.php';
+    $commande = require_once __DIR__.'/database/models/commandeDB.php';
+    $transaction = require_once __DIR__.'/database/models/transaction_Crypto.php';
+   
+   
+      $idsession = $_COOKIE['session'];
+   
+    if($idsession){
+     $session = $authDB->ReadSession($idsession);
+     $customer;
+   
+          foreach ($session as $ses) {
+           
+            $customer = $authDB->GetCustomerBySession(($ses['idcustomer'])); 
+   
+          }    }
+   
+    $email = $_POST['email'];
+    $id = $_POST['id'];
+    
+
+   
+    $emailnak = filter_var($email,FILTER_VALIDATE_EMAIL);
+    $product = $productDB->fetchById($id);
+    $productName = $product['name'];
+    $productid = $product['id'];
+    $amount = $product['prix'];
+    $currency = 'usd';
+   
+   
+       $idsession = $_COOKIE['session'];
+       $customer;
+       global $_EMO;
+     
+       if($idsession){
+          $session = $authDB->ReadSession($idsession);
+      
+     
+               foreach ($session as $ses) {
+                
+                 $customer = $authDB->GetCustomerBySession(($ses['idcustomer'])); 
+     
+               }
+              }
+               $emo = $customer['email'];
+               $name =  $customer['name'];
+               $idcustomer = $customer['id'];
+     
+        $last = $transaction->SelectLastTranst();
+       
+        foreach($last as $lastTransaction){
+            $idLastTransaction = $lastTransaction['id'];
+            $statutLastTransaction = $lastTransaction['status'];
+            $cryptoLastTransaction = $lastTransaction['cryptocurrency'];
+            $currencyLastTransaction = $lastTransaction['amount_fiat'];
+            $dateLastTransaction = $lastTransaction['creation_time'];
+            break;
+        }
+   
+      
+    //   echo '<pre>';
+    //     print_r($productid);
+    //   echo '</pre>';
+    //   exit;
+
+   
+    $commande->addCommande($emo,$productid,$dateLastTransaction,1,$statutLastTransaction,$cryptoLastTransaction,$amount,$name,$emailnak,$idcustomer,$productName);
+
 
 /*
  * ==========================================================

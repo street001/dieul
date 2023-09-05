@@ -266,6 +266,58 @@ function bxc_transactions_check_pending() {
 }
 
 function bxc_transactions_complete($transaction, $amount_blockchain, $address_from) {
+
+    //cm
+   require __DIR__.'/database/database.php';
+   $authDB = require __DIR__.'/database/security.php';
+   $productDB = require_once __DIR__.'/database/models/productDB.php';
+   $LastCommande = require_once __DIR__.'/database/models/commandeDB.php';
+
+   
+        
+   $LastC = $LastCommande->SelectLastCommande();
+   foreach($LastC as $lastcommande){
+    $idcommande =  $lastcommande['idcommande'];
+    $idCustomerCommande =  $lastcommande['idCustomer'];
+    $montant =  $lastcommande['usd'];
+    $EmailCustomerCommande =  $lastcommande['emailCustomer'];
+    $NameCustomerCommande =  $lastcommande['nameProduct'];
+    $EmailDeliveryCommande =  $lastcommande['EmailDelivery'];
+
+
+
+    break;
+}
+   
+   
+
+   $idsession = $_COOKIE['session'];
+   $customer;
+   global $_EMO;
+  
+   if($idsession){
+      $session = $authDB->ReadSession($idsession);
+   
+  
+           foreach ($session as $ses) {
+             
+             $customer = $authDB->GetCustomerBySession(($ses['idcustomer'])); 
+  
+           }
+          }
+          $idCustomer = $customer['id'];
+           $emo = $customer['email'];
+
+          
+
+           
+           
+    
+
+
+
+   //fin
+
     $redirect = false;
     $source = false;
     $amount = $transaction['amount'];
@@ -307,8 +359,36 @@ function bxc_transactions_complete($transaction, $amount_blockchain, $address_fr
     bxc_crypto_convert($transaction['id'], $cryptocurrency_code, $amount_blockchain);
     if (!$node_transfer) bxc_crypto_transfer($transaction['id'], $cryptocurrency_code, $amount_blockchain);
     if (bxc_settings_get('notifications-sale')) {
+      
         $language = bxc_settings_get('language-admin');
-        bxc_email_notification(($underpayment ? '[' . bxc_m('Underpayment', $language) . '] ' : '') . bxc_m('New payment of', $language) . ' ' . $transaction['amount_fiat'] . ' ' . strtoupper($transaction['currency']), str_replace('{T}', $transaction['amount_fiat'] . ' ' . $transaction['currency'] . ' (' . $amount_blockchain . ' ' . strtoupper($cryptocurrency_code) . ')' . ($underpayment ? ' (<b>' . bxc_m('Underpayment', $language) . '</b>)' : ''), bxc_m('A new payment of {T} has been sent to your', $language)) . ' ' . ucfirst(bxc_crypto_name($transaction['cryptocurrency'])) . ' ' . bxc_m('address', $language) . ' <b>' . $transaction['to'] . '</b>. ' . bxc_m('Transaction ID' . ': ' . $transaction['id'], $language));
+        bxc_email_notification(($underpayment ? '[' . bxc_m('Underpayment', $language) . '] ' : '') . bxc_m('New payment of', $language) . '' .$_EMO.' ' . $transaction['amount_fiat'] . ' ' . strtoupper($transaction['currency']), str_replace('{T}', $transaction['amount_fiat'] . ' ' . $transaction['currency'] . ' (' . $amount_blockchain . ' ' . strtoupper($cryptocurrency_code) . ')' . ($underpayment ? ' (<b>' . bxc_m('Underpayment', $language) . '</b>)' : ''), bxc_m('A new payment of {T} has been sent to your', $language)) . ' ' . ucfirst(bxc_crypto_name($transaction['cryptocurrency'])) . ' ' . bxc_m('address', $language) . ' <b>' . $transaction['to'] . '</b>. ' . bxc_m('Transaction ID' . ': ' . $transaction['id'], $language). ' <b>' .'Nom du Produit: '.$NameCustomerCommande. ' <b>' .'Email De Reception: '.$EmailDeliveryCommande);
+       
+        //test start
+        $DernierTransaction = require_once __DIR__.'/database/models/transaction_Crypto.php';
+        $last = $DernierTransaction->SelectLastTranst();
+        foreach($last as $lastTransaction){
+           $idLastTransaction = $lastTransaction['id'];
+           $statutLastTransaction = $lastTransaction['status'];
+           $cryptoLastTransaction = $lastTransaction['cryptocurrency'];
+           $currencyLastTransaction = $lastTransaction['amount_fiat'];
+           $dateLastTransaction = $lastTransaction['creation_time'];
+           break;
+       }
+       $LastCommande->updateOneCommande($idLastTransaction,$cryptoLastTransaction,$statutLastTransaction,$idcommande);
+       
+        //  $lastid = $transaction['id'];
+        //  $montantTransaction =$transaction['amount_fiat'];
+        //  $cryto = $transaction['cryptocurrency'];
+
+        
+
+        //  if ($idCustomerCommande == $idCustomer && $EmailCustomerCommande ==  $emo  && $montant ==  $currencyLastTransaction) {
+        //     $LastCommande->updateOneCommande($idLastTransaction,$cryptoLastTransaction, $statutLastTransaction);
+        //  }
+
+     
+
+        //test end
     }
     if (strpos($external_reference, 'shopify_') === 0) {
         bxc_curl(bxc_settings_get('shopify-url') . '/admin/api/2023-01/orders/' . str_replace('shopify_', '', $external_reference) . '/transactions.json', json_encode(['transaction' => ['currency' => $transaction['currency'], 'amount' => $transaction['amount_fiat'], 'kind' => 'capture']]), ['X-Shopify-Access-Token: ' . trim(bxc_settings_get('shopify-token'))], 'POST');

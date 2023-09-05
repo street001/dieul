@@ -1,4 +1,6 @@
 <?php
+  
+
 
 /*
  * ==========================================================
@@ -24,12 +26,14 @@ if (isset($_POST['init'])) {
 }
 if (isset($_POST['checkout'])) {
     bxc_checkout($_POST['checkout']);
+
 }
 if (isset($_POST['init_exchange'])) {
     require_once(__DIR__ . '/apps/exchange/exchange_code.php');
     bxc_exchange_init();
 }
 function bxc_checkout_init() {
+ 
     $qr_color = bxc_settings_get('color-2');
     if ($qr_color) {
         if (strpos('#', $qr_color) !== false) {
