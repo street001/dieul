@@ -1,14 +1,11 @@
 <?php
 
-
-
-
 /*
  * ==========================================================
  * AJAX.PHP
  * ==========================================================
  *
- * AJAX functions. This file must be executed only via AJAX. ï¿½ 2022 Boxcoin. All rights reserved.
+ * AJAX functions. This file must be executed only via AJAX. © 2022 Boxcoin. All rights reserved.
  *
  */
 
@@ -123,8 +120,5 @@ function bxc_security_error() {
     $admin_functions = ['refund', 'get-transaction', 'payment-link', 'email-test', 'update-transaction', 'invoice', 'download-transactions', 'get-settings', 'save-settings', 'update', 'get-balances', 'get-transactions', 'get-checkouts', 'save-checkout', 'delete-checkout'];
     return in_array($_POST['function'], $admin_functions) && !bxc_verify_admin();
 }
-
-
- 
 
 ?>
